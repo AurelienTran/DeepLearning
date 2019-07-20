@@ -1,7 +1,6 @@
 class perceptron {
     constructor(size) {
         // Define and initialize class member
-        this.size = size;
         this.weights = new Array(size);
         
         // Initialize weitghs with random value from -1 to 1
@@ -28,7 +27,7 @@ class perceptron {
         // Tune weight in order to minimize the error
         var predicted = this.predict(inputs);
         for(var i = 0; i < inputs.length; i++) {
-            this.weights[i] *= learningRate * (expected - predicted) * this.weights[i];
+            this.weights[i] += learningRate * (expected - predicted) * inputs[i];
         }
     }
 }
