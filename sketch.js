@@ -1,7 +1,7 @@
 var brain;
 var learningRate;
 var dataSet;
-var step;
+var slider;
 
 class data {
     constructor() {
@@ -60,16 +60,22 @@ class data {
 }
 
 function setup() {
+    // Create p5 canvas to show A.I. evolution
     createCanvas(800, 600);
     frameRate(5);
 
+    // Create slider to control simulation speed
+    slider = createSlider(1, 25, 5);
+    slider.position(10, 10);
+    slider.style('width', '80px');
+
+    // Initialize A.I. model
     brain = new perceptron(3);
-    step = 0
-    learningRate = 0.01;
-    dataSet = [];
+    learningRate = 0.1;
 
     // Initialize dataset
-    for(var i = 0; i < 100; i++) {
+    dataSet = [];
+    for(var i = 0; i < 50; i++) {
         dataSet[i] = new data();
     }
 
@@ -91,4 +97,7 @@ function draw() {
 
     // Add data to the set of data to display
     dataSet.push(newdata);
+
+    // Update framerate according to the slider position
+    frameRate(slider.value());
 }
