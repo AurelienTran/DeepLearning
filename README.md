@@ -15,4 +15,4 @@ The following page is running the current master branch demo:
 * ...
 
 ## Authors
-* Aurelien Tran <aurelien.tran@gmail.com>
+* Aurelien Tran (aurelien.tran@gmail.com)
