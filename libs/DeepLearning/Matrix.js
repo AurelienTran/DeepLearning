@@ -17,12 +17,38 @@ class Matrix {
     }
 
     /**
-     * Randomize data between 0 and 1.
+     * Randomize data between -1 and 1.
      */
     randomize() {
         for(let r = 0; r < this.row; r++) {
             for(let c = 0; c < this.col; c++) {
-                this.data[r][c] = Math.floor(Math.random() * 10);
+                this.data[r][c] = (Math.random() * 2) - 1;
+            }
+        }
+    }
+
+    /**
+     * Replace all matrix element by using a callback function.
+     * @param {func} func Function to modify all Matrix element
+     */
+    map(func) {
+        for(let r = 0; r < this.row; r++) {
+            for(let c = 0; c < this.col; c++) {
+                this.data[r][c] = func(this.data[r][c]);
+            }
+        }
+    }
+
+    /**
+     * Add one matrix to this one
+     * @param {Matrix} m The matrix to add
+     */
+    add(m) {
+        console.assert(this.row = m.row);
+        console.assert(this.col = m.col);
+        for(let r = 0; r < this.row; r++) {
+            for(let c = 0; c < this.col; c++) {
+                this.data[r][c] += m.data[r][c];
             }
         }
     }
@@ -32,6 +58,18 @@ class Matrix {
      */
     print() {
         console.table(this.data);
+    }
+
+    /**
+     * Convert array to Matrix
+     * @param {number[]} input Array to convert
+     */
+    static fromArray(input) {
+        let res = new Matrix(input.length, 1);
+        for(let i = 0; i < res.row; i++) {
+            res.data[i][0] = input[i];
+        }
+        return res;
     }
 
     /**
@@ -92,19 +130,9 @@ class Matrix {
         }
         return res;
     }
-
-    /**
-     * Replace all matrix element by using a callback function.
-     * @param {func} func Function to modify all Matrix element
-     */
-    map(func) {
-        for(let r = 0; r < this.row; r++) {
-            for(let c = 0; c < this.col; c++) {
-                this.data[r][c] = func(this.data[r][c]);
-            }
-        }
-    }
 }
+
+
 
 /**
  * Callback to replace Matrix element value
@@ -112,4 +140,3 @@ class Matrix {
  * @param {number} elem The Matrix element
  * @returns {number} The value to replace
  */
-
