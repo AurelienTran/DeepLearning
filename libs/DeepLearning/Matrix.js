@@ -54,6 +54,20 @@ class Matrix {
     }
 
     /**
+     * Substract one matrix to this one
+     * @param {Matrix} m The matrix to substract
+     */
+    sub(m) {
+        console.assert(this.row = m.row);
+        console.assert(this.col = m.col);
+        for(let r = 0; r < this.row; r++) {
+            for(let c = 0; c < this.col; c++) {
+                this.data[r][c] -= m.data[r][c];
+            }
+        }
+    }
+
+    /**
      * Print matrix in the console.
      */
     print() {
@@ -86,6 +100,26 @@ class Matrix {
         for(let r = 0; r < m1.row; r++) {
             for(let c = 0; c < m1.col; c++) {
                 res.data[r][c] = m1.data[r][c] + m2.data[r][c];
+            }
+        }
+
+        return res;
+    }
+
+    /**
+     * Substract two matrix
+     * @param {Matrix} m1 The first matrix
+     * @param {Matrix} m2 Second matrix to substract
+     * @returns {Matrix} m1 - m2
+     */
+    static sub(m1, m2) {
+        console.assert(m1.col == m2.col, "Cannot add matrix with different size.");
+        console.assert(m1.row == m2.row, "Cannot add matrix with different size.");
+        let res = new Matrix(m1.row, m1.col);
+
+        for(let r = 0; r < m1.row; r++) {
+            for(let c = 0; c < m1.col; c++) {
+                res.data[r][c] = m1.data[r][c] - m2.data[r][c];
             }
         }
 
@@ -131,8 +165,6 @@ class Matrix {
         return res;
     }
 }
-
-
 
 /**
  * Callback to replace Matrix element value
