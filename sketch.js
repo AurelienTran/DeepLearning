@@ -1,34 +1,25 @@
-var brain;
-var learningRate;
-var dataSet;
-var slider;
+let brain;
+let learningRate;
+let dataSet;
+let slider;
 
 class data {
     constructor() {
         // Set data position
-        this.x = random(-1, 1);
-        this.y = random(-1, 1);
-
-        // This should be done inside brain but we are doing it here since neural network class have not been created yet
-        this.bias = 1;
+        this.x = random(0, width);
+        this.y = random(0, height);
 
         // Define expected result
         this.expected = 1;
-        if(this.x > this.y + 0.2) {
+        if(this.x > this.y + width / 4) {
             this.expected = 0;
         }
         
-        // Draw line for the expected
-        stroke(1);
-        var x1 = map(-1, -1, 1, 0, width);
-        var y1 = map(-1.2, -1, 1, 0, height);
-        var x2 = map(1, -1, 1, 0, width);
-        var y2 = map(0.8, -1, 1, 0, height);
-        line(x1, y1, x2, y2);
     }
 
     getInputs() {
-        return [this.x, this.y, this.bias];
+        // 3rd input is bias, it should be moved inside the neural network
+        return [this.x / width, this.y / height, 1];
     }
 
     getExpectedValue() {
@@ -36,14 +27,10 @@ class data {
     }
 
     draw(isNew) {
-        // Get position in the canvas
-        var x = map(this.x, -1, 1, 0, width);
-        var y = map(this.y, -1, 1, 0, height);
-
         // Set color depending on data status
-        var predicted = brain.predict(this.getInputs())
-        var expectedColor = this.expected == 1 ? color(0, 0, 0) : color(255, 255, 255);
-        var predictedColor = this.expected == predicted ? color(0, 0, 0) : color(255, 0, 0);
+        let predicted = brain.predict(this.getInputs())
+        let expectedColor = this.expected == 1 ? color(0, 0, 0) : color(255, 255, 255);
+        let predictedColor = this.expected == predicted ? color(0, 0, 0) : color(255, 0, 0);
 
         if(isNew)
         {
@@ -55,7 +42,7 @@ class data {
         strokeWeight(2);
         stroke(predictedColor);
         fill(expectedColor);
-        ellipse(x, y, 15, 15);
+        ellipse(this.x, this.y, 15, 15);
     }
 }
 
@@ -65,17 +52,17 @@ function setup() {
     frameRate(5);
 
     // Create slider to control simulation speed
-    slider = createSlider(1, 25, 5);
+    slider = createSlider(1, 25, 1);
     slider.position(10, 10);
     slider.style('width', '80px');
 
     // Initialize A.I. model
     brain = new perceptron(3);
-    learningRate = 0.1;
+    learningRate = 0.001;
 
     // Initialize dataset
     dataSet = [];
-    for(var i = 0; i < 50; i++) {
+    for(let i = 0; i < 400; i++) {
         dataSet[i] = new data();
     }
 
@@ -86,18 +73,25 @@ function draw() {
     background(255);
 
     // Print all data set
-    for(var i = 0; i < dataSet.length; i++) {
+    for(let i = 0; i < dataSet.length; i++) {
         dataSet[i].draw();
     }
+    for(let i = 0; i < dataSet.length; i++) {
+        brain.train(dataSet[i].getInputs(), dataSet[i].getExpectedValue(), learningRate);
+    }
 
-    // Create new data and train the model with it
-    var newdata = new data();
-    newdata.draw(true);
-    brain.train(newdata.getInputs(), newdata.getExpectedValue(), learningRate);
-
-    // Add data to the set of data to display
-    dataSet.push(newdata);
+    // Shift element in array
+    d = dataSet.shift();
+    dataSet.push(d);
 
     // Update framerate according to the slider position
     frameRate(slider.value());
+
+    // Draw line for the expected
+    stroke(1);
+    let x1 = 0;
+    let y1 = -width / 4;
+    let x2 = width;
+    let y2 = width * 3 / 4;
+    line(x1, y1, x2, y2);
 }

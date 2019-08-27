@@ -22,13 +22,17 @@ class NeuralNetwork {
         }
     }
 
+    guess(input) {
+        return Matrix.toArray(this.feedForward(input));
+    }
+
     feedForward(input) {
         // Initialize
         let result = [];
         result[0] = Matrix.fromArray(input);
 
         // Apply weight, bias and activation for each layer
-        for(let l = 0; l < this.node.length - 1; l++) {
+        for(let l = 0; l < this.weight.length; l++) {
             result[l+1] = Matrix.mult(this.weight[l], result[l]);
             result[l+1].add(this.bias[l]);
             result[l+1].map(NeuralNetwork.activation_tanh)
@@ -38,7 +42,7 @@ class NeuralNetwork {
     }
 
     print() {
-        for(let l = 0; l < this.node.length - 1; l++) {
+        for(let l = 0; l < this.weight.length; l++) {
             this.weight[l].print();
             this.bias[l].print();
         }
@@ -52,7 +56,7 @@ class NeuralNetwork {
 // Test program
 let nn = new NeuralNetwork([2, 3, 1]);
 let m = Matrix.fromArray([-1, 0, 1]);
-nn.feedForward([0.5, -0.5]).print();
+console.log(nn.guess([0.5, -0.5]));
 
 
 

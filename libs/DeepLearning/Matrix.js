@@ -87,6 +87,20 @@ class Matrix {
     }
 
     /**
+     * Convert Matrix to array
+     * @param {Matrix} m The matrix to convert to array
+     */
+    static toArray(m) {
+        let res = [];
+        for(let r = 0; r < m.row; r++) {
+            for(let c = 0; c < m.col; c++) {
+                res.push(m.data[r][c]);
+            }
+        }
+        return res;
+    }
+
+    /**
      * Add two matrix
      * @param {Matrix} m1 First matrix to add
      * @param {Matrix} m2 Second matrix to add
