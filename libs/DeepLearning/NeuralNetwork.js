@@ -5,58 +5,120 @@ class NeuralNetwork {
      */
     constructor(node) {
         this.node = node;
-        this.weight = [];
-        this.bias = [];
+        this.learningRate = 0.1;
+        this.layer = [];
         for(let l = 0; l < this.node.length - 1; l++) {
             // Get the input/output layer node number
-            let l_input = this.node[l];
-            let l_output = this.node[l+1];
+            let layerInputNo = this.node[l];
+            let layerOutputNo = this.node[l+1];
 
-            // Initialize weight matrix
-            this.weight[l] = new Matrix(l_output, l_input);
-            this.weight[l].randomize();
+            // Initialize weight and bias matrix
+            let layerWeight = new Matrix(layerOutputNo, layerInputNo);
+            let layerBias = new Matrix(layerOutputNo, 1);
+            layerWeight.randomize();
+            layerBias.randomize();
 
-            // Initialize bias matrix
-            this.bias[l] = new Matrix(l_output, 1);
-            this.bias[l].randomize();
+            // Create layer
+            this.layer.push({weight:layerWeight, bias:layerBias});
         }
     }
 
-    guess(input) {
-        return Matrix.toArray(this.feedForward(input));
-    }
-
-    feedForward(input) {
-        // Initialize
-        let result = [];
-        result[0] = Matrix.fromArray(input);
-
-        // Apply weight, bias and activation for each layer
-        for(let l = 0; l < this.weight.length; l++) {
-            result[l+1] = Matrix.mult(this.weight[l], result[l]);
-            result[l+1].add(this.bias[l]);
-            result[l+1].map(NeuralNetwork.activation_tanh)
-        }
-        
-        return result[this.node.length - 1];
+    setLearningRate(lr) {
+        this.learningRate = lr;
     }
 
     print() {
-        for(let l = 0; l < this.weight.length; l++) {
-            this.weight[l].print();
-            this.bias[l].print();
+        for(let l = 0; l < this.layer.length; l++) {
+            this.layer[l].weight.print();
+            this.layer[l].bias.print();
         }
     }
 
-    static activation_tanh(x) {
-        return Math.tanh(x);
+   guess(input) {
+        // Initialize
+        let layerValue = [];
+        layerValue[0] = Matrix.fromArray(input);
+
+        // Apply weight, bias and activation for each layer
+        for(let i = 0; i < this.layer.length; i++) {
+            layerValue[i + 1] = Matrix.mult(this.layer[i].weight, layerValue[i]);
+            layerValue[i + 1].add(this.layer[i].bias);
+            layerValue[i + 1].map(NeuralNetwork.sigmoid);
+        }
+
+        return Matrix.toArray(layerValue[layerValue.length - 1]);
+    }
+
+    train(input, target) {
+        // Initialize
+        let layerValue = [];
+        layerValue[0] = Matrix.fromArray(input);
+
+        // Apply weight, bias and activation for each layer
+        for(let i = 0; i < this.layer.length; i++) {
+            layerValue[i + 1] = Matrix.mult(this.layer[i].weight, layerValue[i]);
+            layerValue[i + 1].add(this.layer[i].bias);
+            layerValue[i + 1].map(NeuralNetwork.sigmoid);
+        }
+
+        // Initialize the gradient of the loss function for the last layer
+        // Loss function = 1/2 * (target - output)^2
+        let gradient = Matrix.sub(layerValue[layerValue.length - 1], Matrix.fromArray(target));
+
+        // Do the backPropagation layer by layer
+        for(let i = this.layer.length - 1; i >= 0; i--) {
+            // Compute bias delta for this layer
+            let deltaBias = layerValue[i+1];
+            deltaBias.map(NeuralNetwork.dsigmoidFromOutput);
+            deltaBias.multByElement(gradient); 
+
+            // Compute weightDelta for this layer
+            let deltaWeight = Matrix.mult(deltaBias, Matrix.transpose(layerValue[i]));
+
+            // Update gradient for next back propagation layer
+            gradient = Matrix.mult(Matrix.transpose(this.layer[i].weight), gradient);
+
+            // Update weight and bias using delta and learning rate
+            deltaBias.scalar(this.learningRate);
+            deltaWeight.scalar(this.learningRate);
+            this.layer[i].bias.sub(deltaBias);
+            this.layer[i].weight.sub(deltaWeight);
+        }
+   }
+
+    static sigmoid(x) {
+        return 1 / (1 + Math.exp(-x));
+    }
+
+    static dsigmoidFromOutput(y) {
+        return y * (1 - y);
     }
 }
 
-// Test program
-let nn = new NeuralNetwork([2, 3, 1]);
-let m = Matrix.fromArray([-1, 0, 1]);
-console.log(nn.guess([0.5, -0.5]));
+// Initialize nn and dataset
+let nn = new NeuralNetwork([2, 2, 1]);
+let xorData = [
+    {input: [0, 0], target:[0]},
+    {input: [0, 1], target:[1]},
+    {input: [1, 0], target:[1]},
+    {input: [1, 1], target:[0]}
+];
+
+// Show guess wihtout training nn
+for(let i = 0; i < xorData.length; i++) {
+    console.log(xorData[i].input, nn.guess(xorData[i].input));
+}
+
+// train nn
+for(let i = 0; i < 100; i++) {
+    let d = Math.floor(Math.random() * 4);
+    nn.train(xorData[d].input, xorData[d].target);
+}
+
+// Show guess after training nn
+for(let i = 0; i < xorData.length; i++) {
+    console.log(xorData[i].input, nn.guess(xorData[i].input));
+}
 
 
 

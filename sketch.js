@@ -14,7 +14,7 @@ class data {
         if(this.x > this.y + width / 4) {
             this.expected = 0;
         }
-        
+
     }
 
     getInputs() {
@@ -53,7 +53,6 @@ function setup() {
 
     // Create slider to control simulation speed
     slider = createSlider(1, 25, 1);
-    slider.position(10, 10);
     slider.style('width', '80px');
 
     // Initialize A.I. model
