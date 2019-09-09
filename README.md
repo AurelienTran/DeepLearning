@@ -19,6 +19,11 @@ The following page is running the current master branch demo:
 * Add support for batch gradient descent.
 * ...
 
+## How to use this library
+* Your project need to include the two following javascript file
+  * libs/DeepLearning/Matrix.js
+  * libs/DeepLearning/NeuralNetwork.js
+* Sample Code
 ```javascript
 // Initialize and configure neural network with
 // * Input layer with 2 neuron
