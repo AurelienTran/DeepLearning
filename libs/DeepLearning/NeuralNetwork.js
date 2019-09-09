@@ -95,31 +95,3 @@ class NeuralNetwork {
     }
 }
 
-// Initialize nn and dataset
-let nn = new NeuralNetwork([2, 2, 1]);
-let xorData = [
-    {input: [0, 0], target:[0]},
-    {input: [0, 1], target:[1]},
-    {input: [1, 0], target:[1]},
-    {input: [1, 1], target:[0]}
-];
-
-// Show guess wihtout training nn
-for(let i = 0; i < xorData.length; i++) {
-    console.log(xorData[i].input, nn.guess(xorData[i].input));
-}
-
-// train nn
-for(let i = 0; i < 100; i++) {
-    let d = Math.floor(Math.random() * 4);
-    nn.train(xorData[d].input, xorData[d].target);
-}
-
-// Show guess after training nn
-for(let i = 0; i < xorData.length; i++) {
-    console.log(xorData[i].input, nn.guess(xorData[i].input));
-}
-
-
-
-
