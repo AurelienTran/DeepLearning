@@ -7,10 +7,10 @@ class NeuralNetwork {
         this.node = node;
         this.learningRate = 0.1;
         this.layer = [];
-        for(let l = 0; l < this.node.length - 1; l++) {
+        for (let l = 0; l < this.node.length - 1; l++) {
             // Get the input/output layer node number
             let layerInputNo = this.node[l];
-            let layerOutputNo = this.node[l+1];
+            let layerOutputNo = this.node[l + 1];
 
             // Initialize weight and bias matrix
             let layerWeight = new Matrix(layerOutputNo, layerInputNo);
@@ -19,7 +19,7 @@ class NeuralNetwork {
             layerBias.randomize();
 
             // Create layer
-            this.layer.push({weight:layerWeight, bias:layerBias});
+            this.layer.push({ weight: layerWeight, bias: layerBias });
         }
     }
 
@@ -28,19 +28,19 @@ class NeuralNetwork {
     }
 
     print() {
-        for(let l = 0; l < this.layer.length; l++) {
+        for (let l = 0; l < this.layer.length; l++) {
             this.layer[l].weight.print();
             this.layer[l].bias.print();
         }
     }
 
-   guess(input) {
+    guess(input) {
         // Initialize
         let layerValue = [];
         layerValue[0] = Matrix.fromArray(input);
 
         // Apply weight, bias and activation for each layer
-        for(let i = 0; i < this.layer.length; i++) {
+        for (let i = 0; i < this.layer.length; i++) {
             layerValue[i + 1] = Matrix.mult(this.layer[i].weight, layerValue[i]);
             layerValue[i + 1].add(this.layer[i].bias);
             layerValue[i + 1].map(NeuralNetwork.sigmoid);
@@ -55,7 +55,7 @@ class NeuralNetwork {
         layerValue[0] = Matrix.fromArray(input);
 
         // Apply weight, bias and activation for each layer
-        for(let i = 0; i < this.layer.length; i++) {
+        for (let i = 0; i < this.layer.length; i++) {
             layerValue[i + 1] = Matrix.mult(this.layer[i].weight, layerValue[i]);
             layerValue[i + 1].add(this.layer[i].bias);
             layerValue[i + 1].map(NeuralNetwork.sigmoid);
@@ -66,11 +66,11 @@ class NeuralNetwork {
         let gradient = Matrix.sub(layerValue[layerValue.length - 1], Matrix.fromArray(target));
 
         // Do the backPropagation layer by layer
-        for(let i = this.layer.length - 1; i >= 0; i--) {
+        for (let i = this.layer.length - 1; i >= 0; i--) {
             // Compute bias delta for this layer
-            let deltaBias = layerValue[i+1];
+            let deltaBias = layerValue[i + 1];
             deltaBias.map(NeuralNetwork.dsigmoidFromOutput);
-            deltaBias.multByElement(gradient); 
+            deltaBias.multByElement(gradient);
 
             // Compute weightDelta for this layer
             let deltaWeight = Matrix.mult(deltaBias, Matrix.transpose(layerValue[i]));
@@ -84,7 +84,7 @@ class NeuralNetwork {
             this.layer[i].bias.sub(deltaBias);
             this.layer[i].weight.sub(deltaWeight);
         }
-   }
+    }
 
     static sigmoid(x) {
         return 1 / (1 + Math.exp(-x));

@@ -10,13 +10,13 @@ function setup() {
 
     // Initialize neural network and dataset
     trainingData = 0;
-    nn = new NeuralNetwork([2, 2, 1]);
-    nn.setLearningRate(0.5);
+    nn = new NeuralNetwork([2, 3, 1]);
+    nn.setLearningRate(0.1);
     dataSet = [
-        {input: [0, 0], target:[0]},
-        {input: [0, 1], target:[1]},
-        {input: [1, 0], target:[1]},
-        {input: [1, 1], target:[0]}
+        { input: [0, 0], target: [0] },
+        { input: [0, 1], target: [1] },
+        { input: [1, 0], target: [1] },
+        { input: [1, 1], target: [0] }
     ];
 }
 

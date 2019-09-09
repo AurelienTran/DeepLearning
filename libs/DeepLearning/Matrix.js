@@ -8,9 +8,9 @@ class Matrix {
         this.row = row;
         this.col = col;
         this.data = [];
-        for(let r = 0; r < this.row; r++) {
+        for (let r = 0; r < this.row; r++) {
             this.data[r] = [];
-            for(let c = 0; c < this.col; c++) {
+            for (let c = 0; c < this.col; c++) {
                 this.data[r][c] = 0;
             }
         }
@@ -20,8 +20,8 @@ class Matrix {
      * Randomize data between -1 and 1.
      */
     randomize() {
-        for(let r = 0; r < this.row; r++) {
-            for(let c = 0; c < this.col; c++) {
+        for (let r = 0; r < this.row; r++) {
+            for (let c = 0; c < this.col; c++) {
                 this.data[r][c] = (Math.random() * 2) - 1;
             }
         }
@@ -32,8 +32,8 @@ class Matrix {
      * @param {func} func Function to modify all Matrix element
      */
     map(func) {
-        for(let r = 0; r < this.row; r++) {
-            for(let c = 0; c < this.col; c++) {
+        for (let r = 0; r < this.row; r++) {
+            for (let c = 0; c < this.col; c++) {
                 this.data[r][c] = func(this.data[r][c]);
             }
         }
@@ -44,8 +44,8 @@ class Matrix {
      * @param {number} m The number to multiply
      */
     scalar(x) {
-        for(let r = 0; r < this.row; r++) {
-            for(let c = 0; c < this.col; c++) {
+        for (let r = 0; r < this.row; r++) {
+            for (let c = 0; c < this.col; c++) {
                 this.data[r][c] *= x
             }
         }
@@ -58,8 +58,8 @@ class Matrix {
     add(m) {
         console.assert(this.row = m.row);
         console.assert(this.col = m.col);
-        for(let r = 0; r < this.row; r++) {
-            for(let c = 0; c < this.col; c++) {
+        for (let r = 0; r < this.row; r++) {
+            for (let c = 0; c < this.col; c++) {
                 this.data[r][c] += m.data[r][c];
             }
         }
@@ -72,8 +72,8 @@ class Matrix {
     sub(m) {
         console.assert(this.row = m.row);
         console.assert(this.col = m.col);
-        for(let r = 0; r < this.row; r++) {
-            for(let c = 0; c < this.col; c++) {
+        for (let r = 0; r < this.row; r++) {
+            for (let c = 0; c < this.col; c++) {
                 this.data[r][c] -= m.data[r][c];
             }
         }
@@ -86,8 +86,8 @@ class Matrix {
     multByElement(m) {
         console.assert(this.row = m.row);
         console.assert(this.col = m.col);
-        for(let r = 0; r < this.row; r++) {
-            for(let c = 0; c < this.col; c++) {
+        for (let r = 0; r < this.row; r++) {
+            for (let c = 0; c < this.col; c++) {
                 this.data[r][c] *= m.data[r][c];
             }
         }
@@ -106,7 +106,7 @@ class Matrix {
      */
     static fromArray(input) {
         let res = new Matrix(input.length, 1);
-        for(let i = 0; i < res.row; i++) {
+        for (let i = 0; i < res.row; i++) {
             res.data[i][0] = input[i];
         }
         return res;
@@ -118,8 +118,8 @@ class Matrix {
      */
     static toArray(m) {
         let res = [];
-        for(let r = 0; r < m.row; r++) {
-            for(let c = 0; c < m.col; c++) {
+        for (let r = 0; r < m.row; r++) {
+            for (let c = 0; c < m.col; c++) {
                 res.push(m.data[r][c]);
             }
         }
@@ -137,8 +137,8 @@ class Matrix {
         console.assert(m1.row == m2.row, "Cannot add matrix with different size.");
         let res = new Matrix(m1.row, m1.col);
 
-        for(let r = 0; r < m1.row; r++) {
-            for(let c = 0; c < m1.col; c++) {
+        for (let r = 0; r < m1.row; r++) {
+            for (let c = 0; c < m1.col; c++) {
                 res.data[r][c] = m1.data[r][c] + m2.data[r][c];
             }
         }
@@ -157,8 +157,8 @@ class Matrix {
         console.assert(m1.row == m2.row, "Cannot add matrix with different size.");
         let res = new Matrix(m1.row, m1.col);
 
-        for(let r = 0; r < m1.row; r++) {
-            for(let c = 0; c < m1.col; c++) {
+        for (let r = 0; r < m1.row; r++) {
+            for (let c = 0; c < m1.col; c++) {
                 res.data[r][c] = m1.data[r][c] - m2.data[r][c];
             }
         }
@@ -176,10 +176,10 @@ class Matrix {
         console.assert(m1.col == m2.row, "Cannot multiply matrix with incompatible size.");
         let res = new Matrix(m1.row, m2.col);
 
-        for(let r = 0; r < res.row; r++) {
-            for(let c = 0; c < res.col; c++) {
+        for (let r = 0; r < res.row; r++) {
+            for (let c = 0; c < res.col; c++) {
                 let sum = 0;
-                for(let i = 0; i < m1.col; i++) {
+                for (let i = 0; i < m1.col; i++) {
                     sum += m1.data[r][i] * m2.data[i][c];
                 }
                 res.data[r][c] = sum;
@@ -200,8 +200,8 @@ class Matrix {
         console.assert(m1.row == m2.row, "Cannot add matrix with different size.");
         let res = new Matrix(m1.row, m1.col);
 
-        for(let r = 0; r < m1.row; r++) {
-            for(let c = 0; c < m1.col; c++) {
+        for (let r = 0; r < m1.row; r++) {
+            for (let c = 0; c < m1.col; c++) {
                 res.data[r][c] = m1.data[r][c] * m2.data[r][c];
             }
         }
@@ -217,8 +217,8 @@ class Matrix {
     static transpose(m) {
         let res = new Matrix(m.col, m.row);
 
-        for(let r = 0; r < res.row; r++) {
-            for(let c = 0; c < res.col; c++) {
+        for (let r = 0; r < res.row; r++) {
+            for (let c = 0; c < res.col; c++) {
                 res.data[r][c] = m.data[c][r];
             }
         }
