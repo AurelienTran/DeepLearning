@@ -57,8 +57,8 @@ function draw() {
     }
 
     // Train data
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 1000; i++) {
         let r = Math.floor(Math.random() * dataSet.length);
-        nn.train(dataSet[r].input, dataSet[r].target);
+        nn.train(dataSet[r].input, dataSet[r].target, 10);
     }
 }
