@@ -28,6 +28,17 @@ class Matrix {
     }
 
     /**
+     * Reinitialize Matrix data with zero value
+     */
+    zero() {
+        for (let r = 0; r < this.row; r++) {
+            for (let c = 0; c < this.col; c++) {
+                this.data[r][c] = 0;
+            }
+        }
+    }
+
+    /**
      * Replace all matrix element by using a callback function.
      * @param {func} func Function to modify all Matrix element
      */

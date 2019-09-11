@@ -7,19 +7,24 @@ class NeuralNetwork {
         this.node = node;
         this.learningRate = 0.1;
         this.layer = [];
+        this.batchSampleNumber = 0;
         for (let l = 0; l < this.node.length - 1; l++) {
             // Get the input/output layer node number
             let layerInputNo = this.node[l];
             let layerOutputNo = this.node[l + 1];
 
             // Initialize weight and bias matrix
-            let layerWeight = new Matrix(layerOutputNo, layerInputNo);
-            let layerBias = new Matrix(layerOutputNo, 1);
-            layerWeight.randomize();
-            layerBias.randomize();
+            let w = new Matrix(layerOutputNo, layerInputNo);
+            let b = new Matrix(layerOutputNo, 1);
+            w.randomize();
+            b.randomize();
+
+            // Initialize delta weight and bias for updating neural network by batch
+            let dw = new Matrix(layerOutputNo, layerInputNo);
+            let db = new Matrix(layerOutputNo, 1);
 
             // Create layer
-            this.layer.push({ weight: layerWeight, bias: layerBias });
+            this.layer.push({ weight: w, bias: b, deltaWeight: dw, deltaBias: db });
         }
     }
 
@@ -65,11 +70,13 @@ class NeuralNetwork {
      * Train the neural network using back propagation
      * @param {number[]} input The input vector
      * @param {number[]} target The expected output vector
+     * @param {number[]} batchsize Sample number needed for updating weight and bias
      */
-    train(input, target) {
+    train(input, target, batchsize = 1) {
         // Initialize
         let layerValue = [];
         layerValue[0] = Matrix.fromArray(input);
+        this.batchSampleNumber++;
 
         // Apply weight, bias and activation for each layer
         for (let i = 0; i < this.layer.length; i++) {
@@ -92,14 +99,31 @@ class NeuralNetwork {
             // Compute weightDelta for this layer
             let deltaWeight = Matrix.mult(deltaBias, Matrix.transpose(layerValue[i]));
 
+            // Add delta weight to the current batch
+            this.layer[i].deltaBias.add(deltaBias);
+            this.layer[i].deltaWeight.add(deltaWeight);
+
             // Update gradient for next back propagation layer
             gradient = Matrix.mult(Matrix.transpose(this.layer[i].weight), gradient);
+        }
 
-            // Update weight and bias using delta and learning rate
-            deltaBias.scalar(this.learningRate);
-            deltaWeight.scalar(this.learningRate);
-            this.layer[i].bias.sub(deltaBias);
-            this.layer[i].weight.sub(deltaWeight);
+        if (this.batchSampleNumber >= batchsize) {
+            for (let i = 0; i < this.layer.length; i++) {
+                // Compute delta using learning rate and averaging with batch sample number
+                this.layer[i].deltaBias.scalar(this.learningRate / this.batchSampleNumber);
+                this.layer[i].deltaWeight.scalar(this.learningRate / this.batchSampleNumber);
+
+                // Update weight and bias using delta
+                this.layer[i].bias.sub(this.layer[i].deltaBias);
+                this.layer[i].weight.sub(this.layer[i].deltaWeight);
+
+                // Reinitialize delta after updating weight and bias
+                this.layer[i].deltaBias.zero();
+                this.layer[i].deltaWeight.zero();
+            }
+
+            // Reset batch sample number
+            this.batchSampleNumber = 0;
         }
     }
 
