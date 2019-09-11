@@ -1,6 +1,7 @@
 let nn; // Neural Network
 let dataSet; // Data set of this example
 let trainingData; // Total number of training data
+var batchSize; // number of sample for each batch
 
 function setup() {
     // Create p5 canvas to show A.I. evolution
@@ -9,9 +10,10 @@ function setup() {
 
     // Initialize neural network and dataset
     trainingData = 0;
-    nn = new NeuralNetwork([2, 5, 5, 5, 1]);
+    nn = new NeuralNetwork([2, 9, 9, 9, 1]);
     nn.setLearningRate(0.1);
     dataSet = [];
+    batchSize = 4;
     for (let i = 0; i < 4; i++) {
         let input1 = [Math.random(), Math.random()];
         let input2 = [Math.random(), Math.random()];
@@ -59,6 +61,6 @@ function draw() {
     // Train data
     for (let i = 0; i < 1000; i++) {
         let r = Math.floor(Math.random() * dataSet.length);
-        nn.train(dataSet[r].input, dataSet[r].target, 10);
+        nn.train(dataSet[r].input, dataSet[r].target, batchSize);
     }
 }
