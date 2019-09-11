@@ -23,10 +23,17 @@ class NeuralNetwork {
         }
     }
 
+    /**
+     * Set the learning rate value of the train function
+     * @param {number} lr The learning rate value
+     */
     setLearningRate(lr) {
         this.learningRate = lr;
     }
 
+    /**
+     * Print internal weight and bias of this neural network
+     */
     print() {
         for (let l = 0; l < this.layer.length; l++) {
             this.layer[l].weight.print();
@@ -34,6 +41,11 @@ class NeuralNetwork {
         }
     }
 
+    /**
+     * Feed forward the neural network
+     * @param {number[]} input The input vector
+     * @returns {number[]} Output vector
+     */
     guess(input) {
         // Initialize
         let layerValue = [];
@@ -49,6 +61,11 @@ class NeuralNetwork {
         return Matrix.toArray(layerValue[layerValue.length - 1]);
     }
 
+    /**
+     * Train the neural network using back propagation
+     * @param {number[]} input The input vector
+     * @param {number[]} target The expected output vector
+     */
     train(input, target) {
         // Initialize
         let layerValue = [];
@@ -86,10 +103,20 @@ class NeuralNetwork {
         }
     }
 
+    /**
+     * The activation function for this neural network
+     * @param {number} x input value
+     * @returns {number} Simoid of the input value
+     */
     static sigmoid(x) {
         return 1 / (1 + Math.exp(-x));
     }
 
+    /**
+     * Compute the derivation of sigmoid based on sigmoid output value
+     * @param {number} y The value of sigmoid(x)
+     * @returns {number} The value of the derivation(sigmoid(x))
+     */
     static dsigmoidFromOutput(y) {
         return y * (1 - y);
     }
