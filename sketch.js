@@ -10,7 +10,7 @@ function setup() {
 
     // Initialize neural network and dataset
     trainingData = 0;
-    nn = new NeuralNetwork([2, 9, 9, 9, 1]);
+    nn = new NeuralNetwork([2, 16, 16, 16, 1]);
     nn.setLearningRate(0.1);
     dataSet = [];
     batchSize = 4;
