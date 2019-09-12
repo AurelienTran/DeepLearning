@@ -13,11 +13,11 @@ The following page is running the current master branch demo:
 * Configurable number of layer.
 * Configurable number of neuron for each layer.
 * Configurable learning rate.
-* Back propagation using Stochastic Gradient Descent (update neural network after each training sample).
+* Back propagation using Stochastic or Batch gradient descent.
 
-## Future work
-* Add support for batch gradient descent.
-* ...
+## Future work (Under consideration)
+* Unsupervised learning.
+* Convolution neural network.
 
 ## How to use this library
 * Your project need to include the two following javascript file
@@ -30,14 +30,16 @@ The following page is running the current master branch demo:
 // * First Hidden layer with 3 neuron
 // * Second Hidden layer with 4 neuron
 // * Output layer with 1 neuron
-// * learning rate of 0.1
 let nn = new NeuralNetwork([2, 3, 4, 1]);
+
+// Set training learning rate of 0.1
 nn.setLearningRate(0.1);
 
 // Train the neural network
 // * [x1, ...]: neural network input array
 // * [y1, ...]: neural network expected output array
-nn.train([x1, x2], [y1]);
+// * batchSize: number of training sample before updating neural network weight and bias
+nn.train([x1, x2], [y1], batchSize);
 
 // Guess ouput based on input array
 // return [y1, ...] which is an array of number between 0 and 1

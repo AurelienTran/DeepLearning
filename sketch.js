@@ -14,7 +14,7 @@ function setup() {
     nn.setLearningRate(0.1);
     dataSet = [];
     batchSize = 4;
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 8; i++) {
         let input1 = [Math.random(), Math.random()];
         let input2 = [Math.random(), Math.random()];
         dataSet.push({input: input1, target: [0]})
