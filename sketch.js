@@ -13,7 +13,7 @@ function setup() {
     nn = new NeuralNetwork([2, 16, 16, 16, 1]);
     nn.setLearningRate(0.1);
     dataSet = [];
-    batchSize = 4;
+    batchSize = 8;
     for (let i = 0; i < 8; i++) {
         let input1 = [Math.random(), Math.random()];
         let input2 = [Math.random(), Math.random()];
