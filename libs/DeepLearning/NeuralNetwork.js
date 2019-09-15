@@ -8,6 +8,7 @@ class NeuralNetwork {
         this.learningRate = 0.1;
         this.layer = [];
         this.batchSampleNumber = 0;
+        this.batchSize = 1;
         for (let l = 0; l < this.node.length - 1; l++) {
             // Get the input/output layer node number
             let layerInputNo = this.node[l];
@@ -34,6 +35,14 @@ class NeuralNetwork {
      */
     setLearningRate(lr) {
         this.learningRate = lr;
+    }
+
+    /**
+     * Set the number of sample to use for updating weight and bias
+     * @param {number} bs The batch size setting
+     */
+    setBatchSize(bs) {
+        this.batchSize = bs;
     }
 
     /**
@@ -70,9 +79,8 @@ class NeuralNetwork {
      * Train the neural network using back propagation
      * @param {number[]} input The input vector
      * @param {number[]} target The expected output vector
-     * @param {number[]} batchsize Sample number needed for updating weight and bias
      */
-    train(input, target, batchsize = 1) {
+    train(input, target) {
         // Initialize
         let layerValue = [];
         layerValue[0] = Matrix.fromArray(input);
@@ -107,7 +115,7 @@ class NeuralNetwork {
             gradient = Matrix.mult(Matrix.transpose(this.layer[i].weight), gradient);
         }
 
-        if (this.batchSampleNumber >= batchsize) {
+        if (this.batchSampleNumber >= this.batchSize) {
             for (let i = 0; i < this.layer.length; i++) {
                 // Compute delta using learning rate and averaging with batch sample number
                 this.layer[i].deltaBias.scalar(this.learningRate / this.batchSampleNumber);

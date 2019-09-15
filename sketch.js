@@ -12,8 +12,8 @@ function setup() {
     trainingData = 0;
     nn = new NeuralNetwork([2, 16, 16, 16, 1]);
     nn.setLearningRate(0.1);
+    nn.setBatchSize(8);
     dataSet = [];
-    batchSize = 8;
     for (let i = 0; i < 8; i++) {
         let input1 = [Math.random(), Math.random()];
         let input2 = [Math.random(), Math.random()];
@@ -61,6 +61,6 @@ function draw() {
     // Train data
     for (let i = 0; i < 1000; i++) {
         let r = Math.floor(Math.random() * dataSet.length);
-        nn.train(dataSet[r].input, dataSet[r].target, batchSize);
+        nn.train(dataSet[r].input, dataSet[r].target);
     }
 }

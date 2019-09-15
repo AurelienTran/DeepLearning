@@ -35,11 +35,13 @@ let nn = new NeuralNetwork([2, 3, 4, 1]);
 // Set training learning rate of 0.1
 nn.setLearningRate(0.1);
 
+// Set number of training sample used for updating neural network weight and bias
+nn.setBatchSize(8);
+
 // Train the neural network
 // * [x1, ...]: neural network input array
-// * [y1, ...]: neural network expected output array
-// * batchSize: number of training sample before updating neural network weight and bias
-nn.train([x1, x2], [y1], batchSize);
+// * [y1, ...]: neural network expected output array 
+nn.train([x1, x2], [y1]);
 
 // Guess ouput based on input array
 // return [y1, ...] which is an array of number between 0 and 1
